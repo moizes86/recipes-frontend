@@ -1,89 +1,61 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
-import InputField from "./Forms/InputField";
-import CustomButton from "./CustomButton";
-
-import { validationsAPI } from "../DAL/validations";
+import useForm from "../useForm";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { onLoading, onUpdateUser } from "../redux/actions";
-
-import useFetch from "../useFetch";
+import { onUpdateUser } from "../redux/actions";
 
 // Routing
-import { history, useHistory } from "react-router-dom";
-import { getUserById, updateUserDetails } from "../services/API_Services/UserAPI";
-import CheckCircleSuccess from "./CheckCircleSuccess";
+import { updateUserDetails } from "../services/API_Services/UserAPI";
+
+import InputField from "./Forms/InputField";
+import FormBottom from "./Forms/FormBottom";
 
 const MyProfile = () => {
-  const dispatch = useDispatch();
-  const history = useHistory();
   let { activeUser } = useSelector((state) => state);
-  const { sendRequest, loading, data, error, Spinner } = useFetch();
+  const dispatch = useDispatch();
 
-  const [values, setValues] = useState({
-    ...activeUser,
-  });
-
-  const [errors, setErrors] = useState({
-    username: false,
-    password: false,
-    confirmPassword: null,
-  });
-
-  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const {
+    values,
+    errors,
+    handleBlur,
+    handleChange,
+    handleSubmitUser,
+    loading,
+    error,
+    setValues,
+    message,
+    data,
+    countdown,
+  } = useForm();
 
   useEffect(() => {
-    if (!activeUser) return history.push("/");
-    return () => {};
-  }, [activeUser, history]);
+    setValues({
+      email: activeUser.email,
+      username: activeUser.username,
+      password: activeUser.password,
+      confirmPassword: "",
+    });
+  }, []);
 
-  const handleBlur = ({ target: { name, value } }) => {
-    try {
-      const validate = validationsAPI[name];
-      validate(value, values.password);
-      setErrors({ ...errors, [name]: "" });
-    } catch (e) {
-      setErrors({ ...errors, [name]: e.message });
+  useEffect(() => {
+    if (data) {
+      return () => dispatch(onUpdateUser({ ...activeUser, ...data }));
     }
-  };
+  }, [data, dispatch, activeUser]);
 
-  const handleChange = ({ target: { name, value } }) => {
-    setValues({ ...values, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrors({});
-
-    try {
-      validationsAPI.username(values.username);
-      validationsAPI.password(values.password);
-      validationsAPI.confirmPassword(values.confirmPassword, values.password);
-
-      const {
-        // _id: { $oid: id },
-        id,
-        username,
-        password,
-        confirmPassword,
-      } = values;
-      const updateResponse = await sendRequest(updateUserDetails, [id, username, password, confirmPassword]);
-      if (updateResponse.status === 200) {
-        setUpdateSuccess(true);
-        dispatch(onUpdateUser({ ...updateResponse.data }));
-      } else {
-        setErrors("Something went wrong");
-      }
-    } catch (e) {
-      setErrors({ ...errors, [e.field]: e.message });
-    }
-  };
+  const rediertTo = "/";
 
   return (
     <div className="my-profile">
-      <form onSubmit={handleSubmit} noValidate>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmitUser(updateUserDetails, rediertTo);
+        }}
+        noValidate
+      >
         <InputField
           label="Username"
           name="username"
@@ -114,18 +86,14 @@ const MyProfile = () => {
           handleBlur={handleBlur}
         />
 
-        {updateSuccess && <p>Update Success</p>}
-
-        {loading ? (
-          <Spinner />
-        ) : data ? (
-          <CheckCircleSuccess message={data.message} />
-        ) : (
-          <>
-            <CustomButton>Submit</CustomButton>
-            <small>{error}</small>
-          </>
-        )}
+        <FormBottom
+          btnText="Update"
+          loading={loading}
+          message={message}
+          error={error}
+          data={data}
+          countdown={countdown}
+        />
       </form>
     </div>
   );

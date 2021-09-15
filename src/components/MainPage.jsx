@@ -13,16 +13,19 @@ const MainPage = () => {
   const dispatch = useDispatch();
   const { sendRequest, loading, data, error, Spinner } = useFetch();
 
-  const onLoad = async () => {
-    await sendRequest(getRecipes);
-  };
   useEffect(() => {
-    onLoad();
-  }, []);
+    (async () => {
+      await sendRequest(getRecipes);
+    })();
+    // const onLoad = async () => {
+    //   await sendRequest(getRecipes);
+    // };
+    // onLoad();
+  }, [sendRequest]);
 
   useEffect(() => {
     if (data) dispatch(onSetRecipes(data));
-  }, [data]);
+  }, [data, dispatch]);
 
   return (
     <div className="main-page">

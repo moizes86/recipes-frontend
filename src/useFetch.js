@@ -3,7 +3,7 @@ import Spinner from "./components/Spinner";
 
 const useFetch = () => {
   const [data, setData] = useState(null);
-  const [status, setStatus] = useState(null);
+  const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -12,12 +12,10 @@ const useFetch = () => {
     setError(null);
     try {
       const result = await cb(...params);
-      if (result.data && result.status !== 200) throw Error(result.data.message);
-
-      setData(result.data);
-      setStatus(result.status);
+      setData(result.data.payload);
+      setMessage(result.data.message);
     } catch (e) {
-      setError(e.message || "Something went wrong");
+      setError(e.response.data.message || "Something went wrong");
     }
     setLoading(false);
   }, []);
@@ -26,7 +24,7 @@ const useFetch = () => {
     loading,
     error,
     data,
-    status,
+    message,
     Spinner,
     sendRequest,
   };

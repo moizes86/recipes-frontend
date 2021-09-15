@@ -1,25 +1,24 @@
 import React, { useState } from "react";
 
 import InputField from "./InputField";
-import RecipeInstructions from "../RecipeInstructions";
+import Instructions from "../Instructions";
 import "../../styles/styles.scss";
 
-const RecipeFormInstructions = ({ instructions, addItem, removeItem, submitError }) => {
+const InstructionsSection = ({ instructions = [], addItem, removeItem, submitError }) => {
   const [instruction, setInstruction] = useState({
-    id: null,
     text: "",
   });
   const [error, setError] = useState("");
 
-  const handleChange = ({ target: { id, value } }) => {
-    setInstruction({ id, text: value });
+  const handleChange = ({ target: { value } }) => {
+    setInstruction({ text: value });
   };
 
   const addInstruction = (e) => {
     e.preventDefault();
     if (instruction.text.length) {
       addItem(instruction, "instructions");
-      setInstruction({ id: "", text: "" });
+      setInstruction({ text: "" });
       if (error) setError("");
     } else {
       setError("Required");
@@ -44,11 +43,11 @@ const RecipeFormInstructions = ({ instructions, addItem, removeItem, submitError
         <i className="pr-3 fas fa-plus" onClick={addInstruction}></i>
       </div>
 
-      <RecipeInstructions instructions={instructions} removeItem={removeItem} partOfForm={true}/>
+      <Instructions instructions={instructions} removeItem={removeItem} partOfForm={true} />
 
       <small>{error || (!instructions.length && submitError)}</small>
     </div>
   );
 };
 
-export default RecipeFormInstructions;
+export default InstructionsSection;

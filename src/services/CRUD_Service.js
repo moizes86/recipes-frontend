@@ -13,5 +13,5 @@ export const httpPost = (url, Request, includeToken) => {
 };
 
 export const httpDelete = (url, Request) => {
-  httpService("delete", url, Request);
+  return httpService("delete", url, Request);
 };

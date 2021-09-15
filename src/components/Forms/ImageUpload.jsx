@@ -1,89 +1,75 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { validationsAPI } from "../../DAL/validations";
 
-const ImageUpload = ({ images: urls, setImagesInFormState, errors }) => {
-  const [uploadedImages, setUploadedImages] = useState([]);
-  const [preview, setPreview] = useState([]);
+const ImageUpload = ({ images = [], handleChange, errors }) => {
+  const [previews, setPreviews] = useState([]);
   const [error, setError] = useState("");
 
+  // In edit mode - previews are the image-urls
   useEffect(() => {
-    if (uploadedImages) {
-      displayUploadedImages();
+    if (images.length) {
+      const previewAddresses = images.map((image) => "http://localhost:3100/" + image);
+      return setPreviews(previewAddresses);
     }
-  }, [uploadedImages]);
 
-  const displayUploadedImages = () => {
-    const previews = [];
-    uploadedImages.forEach((uploadedImage) => {
-      const objectUrl = URL.createObjectURL(uploadedImage);
-      previews.push(objectUrl);
-    });
-    setPreview(previews);
-  };
+    return setPreviews([]);
+  }, [images]);
 
   const popImage = ({ target: { id } }) => {
-    const imagesArr = uploadedImages.filter((uploadedImage) => uploadedImage.name !== id);
-    setUploadedImages(imagesArr);
-    setImagesInFormState(imagesArr);
+    images.splice(+id, 1);
+    previews.splice(+id, 1);
+    return handleChange({ target: { name: "images", value: images } });
   };
 
-  const handleChange = ({ target: { files } }) => {
-    setError("");
-
-    if (files.length > 4) return setError("Maximum 4 images");
-
-    if (files.length) {
-      const imagesArr = [];
-
+  const addImage = ({ target: { files } }) => {
+    if (files[0]) {
       try {
-        Array.from(files).forEach((file) => {
-          validationsAPI.image(file);
-          imagesArr.push(file); // local component
-        });
-      } catch (error) {
-        setError(error.message);
+        if (images.length === 4) throw Error("Maximun 4 images");
+        validationsAPI.image(files[0]);
+      } catch (err) {
+        setError(err.message);
       }
-      setUploadedImages(imagesArr);
-      setImagesInFormState(imagesArr);
+      images.push(files[0]);
+      const objectUrl = URL.createObjectURL(files[0]);
+      previews.push(objectUrl);
+      return handleChange({ target: { name: "images", value: images } });
     }
   };
 
   return (
-    <div className="image-upload mb-5">
-      <div className="custom-file mb-4">
-        <input
-          type="file"
-          name="images"
-          className="custom-file-input"
-          id="customFile"
-          onChange={handleChange}
-          accept="image/*"
-          multiple={true}
-        />
-        <label htmlFor="customFile" className="custom-file-label">
-          Select File
-        </label>
-      </div>
-      <br />
-      <small>{error}</small>
-
+    <div className="image-upload">
       <div className="row justify-content-between">
-        {uploadedImages.length
-          ? uploadedImages.map((image, i) => (
-              <div className="image-preview" key={image.name}>
-                <img src={preview[i]} alt="" />
-                <div className="pannel">
-                  <i className="fas fa-trash-alt text-danger" onClick={popImage} id={image.name}></i>
-                </div>
+        {/* ADD IMAGE BUTTON */}
+        {images.length < 4 && (
+          <div className="custom-file">
+            <input type="file" name="images" id="customFile" onChange={addImage} accept="image/*" />
+            <label htmlFor="customFile" className="">
+              <div className="image-preview">
+                <img src="/add-btn.png" alt="img" />
+                <div className="pannel"></div>
               </div>
-            ))
-          : urls.map((url, i) => (
-              <div className="image-preview" key={url}>
-                <img src={`${process.env.REACT_APP_SERVER_PATH}/${url}`} alt="" />
-              </div>
-            ))}
+            </label>
+          </div>
+        )}
+
+        {/* PREVIEWS */}
+        {previews.map((preview, i) => (
+          <div className="image-preview" key={preview}>
+            <img src={preview} alt="" />
+            <div className="pannel">
+              <i
+                className="fas fa-trash-alt text-danger"
+                onClick={(e) => {
+                  e.preventDefault();
+                  popImage(e);
+                }}
+                id={i}
+              ></i>
+            </div>
+          </div>
+        ))}
       </div>
-      <small>{errors}</small>
+      <small>{errors || error}</small>
     </div>
   );
 };

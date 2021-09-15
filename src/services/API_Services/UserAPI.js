@@ -1,12 +1,11 @@
 import { httpGet, httpPost, httpPut } from "../CRUD_Service";
 
-
 // / / / / / / / / / / / / / / / / //
 // NODE
 // / / / / / / / / / / / / / / / / //
 
-const url = "https://recipes-db-mm.herokuapp.com/users";
-
+// const url = "https://recipes-db-mm.herokuapp.com/users";
+const url = "http://localhost:3100/users";
 
 // login after signup
 export const getUserById = async (id) => {
@@ -22,7 +21,7 @@ export const updateUserDetails = async (details) => {
 };
 
 export const isCookie = async () => {
-  return httpGet(`${url}/login`);
+  return await httpGet(`${url}/login`);
 };
 
 export const logoutUser = async () => {
@@ -34,15 +33,8 @@ export const loginUser = async (loginData) => {
 };
 
 export const createUser = async (data) => {
-  try {
-    const response = await httpPost(`${url}/signup`, data);
-    return response;
-  } catch (error) {
-    return error.response;
-  }
+  return await httpPost(`${url}/signup`, data);
 };
-
-
 
 // / / / / / / / / / / / / / / / / //
 // / / / / / / / / / / / / / / / / //
@@ -58,7 +50,6 @@ export const createUser = async (data) => {
 //   },
 //   withCredentials: true,
 // };
-
 
 // export const isCookie = async () => {
 //   return axios.get(`${url_flask_users}/login-with-cookie`, config);

@@ -1,79 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 // Redux
 import { onLogin } from "../redux/actions";
 import { useDispatch } from "react-redux";
-import { validationsAPI } from "../DAL/validations";
 import { loginUser } from "../services/API_Services/UserAPI";
-import useFetch from "../useFetch";
-
-// Routing
-import { useHistory } from "react-router-dom";
+import useForm from "../useForm";
 
 // Components
 import InputField from "./Forms/InputField";
-import CheckCircleSuccess from "./CheckCircleSuccess";
-import CustomButton from "./CustomButton";
 
 import "../styles/styles.scss";
+import FormBottom from "./Forms/FormBottom";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
-  const { sendRequest, loading, data, error, Spinner } = useFetch();
-
-  const [values, setValues] = useState({
-    email: "",
-    password: "",
-  });
-
-  const [errors, setErrors] = useState({
-    email: null,
-    password: null,
-  });
-
-  const handleBlur = ({ target: { name, value } }) => {
-    try {
-      const validate = validationsAPI[name];
-      validate(value);
-      setErrors({ ...errors, [name]: "" });
-    } catch (e) {
-      setErrors({ ...errors, [e.field]: e.message });
-    }
-  };
-
-  const handleChange = ({ target: { name, value } }) => {
-    setValues({ ...values, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrors({});
-
-    try {
-      validationsAPI.email(values.email);
-      validationsAPI.password(values.password);
-    } catch (e) {
-      setErrors({ ...errors, [e.field]: e.message });
-      return;
-    }
-
-    await sendRequest(loginUser, values);
-  };
+  const {
+    values,
+    errors,
+    handleBlur,
+    handleChange,
+    handleSubmitUser,
+    loading,
+    error,
+    setValues,
+    message,
+    data,
+    countdown
+  } = useForm();
 
   useEffect(() => {
-    if (data) {
-      dispatch(onLogin(data));
-      setTimeout(() => {
-        history.push("/");
-      }, 2000);
-    }
-    return () => {};
-  }, [data]);
+    setValues({ email: "", password: "" });
+    return () => setValues({ email: "", password: "" });
+  }, [setValues]);
+
+  useEffect(() => {
+    dispatch(onLogin(data));
+  }, [data, dispatch]);
+
+  const redirectTo = '/'
 
   return (
     <div className="login">
-      <form onSubmit={handleSubmit} noValidate>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmitUser(loginUser, redirectTo);
+        }}
+        noValidate
+      >
         <InputField
           label="Email"
           name="email"
@@ -94,19 +68,7 @@ const Login = () => {
           handleBlur={handleBlur}
         />
 
-        {loading ? (
-          <div className="d-flex justify-content-center">
-            <Spinner />
-          </div>
-        ) : data ? (
-          <CheckCircleSuccess message="Welcome. Redirecting..." />
-        ) : (
-          <CustomButton>Login</CustomButton>
-        )}
-
-        <br />
-
-        {error && <small>{error}</small>}
+        <FormBottom btnText="Login" loading={loading} message={message} error={error} data={data} countdown={countdown}/>
       </form>
     </div>
   );

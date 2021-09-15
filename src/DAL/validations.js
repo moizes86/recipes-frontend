@@ -14,7 +14,7 @@ export class CustomError extends Error {
 
 export const validationsAPI = {
   required(name, value) {
-    if (!value) throw new CustomError(name, `${name} is required`);
+    if (!value) throw Error(`${name[0].toUpperCase()}${name.slice(1)} is required`);
   },
   email(email) {
     validationsAPI.required("email", email);
@@ -52,35 +52,34 @@ export const validationsAPI = {
     if (confirmPassword !== password) throw new CustomError("confirmPassword", "Passwords do not match");
   },
 
-  recipeTitle(title) {
-    if (title.length < 4) throw new CustomError("title", "Title must be at least four chars");
-    if (title.length > 45) throw new CustomError("title", "Title is too long! Maximum 45 chars");
+  title(title) {
+    if (title.length < 4) throw Error("Title must be at least four chars");
+    if (title.length > 45) throw Error("Title is too long! Maximum 45 chars");
   },
 
   description(desc) {
     validationsAPI.required("description", desc);
   },
 
-  url(url) {
-    const reg =
-      /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
-    if (!reg.test(url)) throw Error("Invalid source url");
+  source_url(url) {
+    if (url) {
+      const reg = /^(https?:\/\/)?(www\.)?\w{1,}\.\w{1,6}\b((.)*)/;
+      if (!reg.test(url)) throw Error("Invalid url");
+    }
   },
 
-  servings(n) {
-    if (n < 1 || n > 10) throw new CustomError("servings", "Servings must be between 1-10");
+  servings(servings) {
+    if (servings && (servings < 1 || servings > 10)) throw Error("Servings must be between 1-10");
   },
 
-  cook(n) {
-    validationsAPI.required("cook", n);
-    if (n < 1) throw new CustomError("cook", "Invalid cooking time");
+  cook(cook) {
+    if (cook && cook < 1) throw Error("Invalid cooking time");
   },
 
   image(image) {
     if (image.type && image?.type?.substr(0, 5) !== "image")
-      throw new CustomError("image_url", `Error in ${image.name}: Invalid file- images only`);
-    if (image.size > 1024 * 1024 * 5)
-      throw new CustomError("image_url", `Error in ${image.name}: Maximum size 5 mb`);
+      throw Error(`Error in ${image.name}: Invalid file- images only`);
+    if (image.size > 1024 * 1024 * 5) throw Error(`Error in ${image.name}: Maximum size 5 mb`);
   },
 
   ingredients(ingredients) {
@@ -96,4 +95,22 @@ export const validationsAPI = {
       if (!instruction) throw new CustomError("instructions", "Invalid instruction");
     });
   },
+};
+
+export const validateFields = (values) => {
+  for (const key in values) {
+    if (validationsAPI[key]) {
+      try {
+        if (key === "confirmPassword") {
+          validationsAPI[key](values[key], values["password"]);
+        } else {
+          validationsAPI[key](values[key]);
+        }
+      } catch (err) {
+        return { key, message: err.message };
+      }
+    }
+  }
+
+  return true;
 };

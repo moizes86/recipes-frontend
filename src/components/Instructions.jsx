@@ -1,6 +1,6 @@
 import React from "react";
 
-const RecipeInstructions = ({ instructions, removeItem, partOfForm = false }) => {
+const Instructions = ({ instructions=[], removeItem, partOfForm = false }) => {
   return (
     <>
       <ol>
@@ -12,9 +12,9 @@ const RecipeInstructions = ({ instructions, removeItem, partOfForm = false }) =>
               <i
                 className="far fa-trash-alt"
                 onClick={removeItem}
+                title="instructions"
                 id={instruction.id}
-                title={"instructions"}
-                index={i}
+                text={instruction.text}
               ></i>
             )}
           </div>
@@ -24,4 +24,4 @@ const RecipeInstructions = ({ instructions, removeItem, partOfForm = false }) =>
   );
 };
 
-export default RecipeInstructions;
+export default Instructions;

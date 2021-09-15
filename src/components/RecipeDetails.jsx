@@ -23,10 +23,10 @@ const RecipeDetails = ({
         </p>
 
         <span className="text-capitalize font-smaller">
-          {categoriesSelected.map((category) => category.title).join(",  ")}
+          {categoriesSelected.map((category) => category).join(",  ")}
         </span>
         <br />
-        <span className="text-capitalize font-smaller">{dietsSelected.map((diet) => diet.title).join(",  ")}</span>
+        <span className="text-capitalize font-smaller">{dietsSelected.map((diet) => diet).join(",  ")}</span>
 
         <p className="mt-3">
           <span>{description} </span>

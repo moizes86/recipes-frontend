@@ -2,24 +2,24 @@ import React, { useState, useEffect } from "react";
 
 // Components
 import RecipeDetails from "./RecipeDetails";
-import RecipeIngredients from "./RecipeIngredients";
-import RecipeInstructions from "./RecipeInstructions";
+import Ingredients from "./Ingredients";
+import Instructions from "./Instructions";
 
 // STYLES
 import "../styles/styles.scss";
 
 import { useParams } from "react-router-dom";
-import { getCategories, getDiets, getRecipe } from "../services/API_Services/RecipeAPI";
+import { getRecipe } from "../services/API_Services/RecipeAPI";
 import useFetch from "../useFetch";
 import MyCarousel from "./MyCarousel";
 
 const RecipePage = () => {
   const { id, title } = useParams();
   const [recipe, setRecipe] = useState(null);
-  const { sendRequest, loading, data, error, Spinner } = useFetch();
+  const { sendRequest, loading, data, Spinner } = useFetch();
   useEffect(() => {
     sendRequest(getRecipe, id, title);
-  }, [id]);
+  }, [id, sendRequest, title]);
 
   useEffect(() => {
     setRecipe(data);
@@ -39,11 +39,7 @@ const RecipePage = () => {
                 alt=""
               />
 
-              {recipe.images.length === 1 ? (
-                <img src={`${process.env.REACT_APP_SERVER_PATH}/${recipe.images[0]}`} alt="" />
-              ) : (
-                <MyCarousel urls={recipe.images} />
-              )}
+              <MyCarousel urls={recipe.images} />
             </div>
 
             <div className="col-sm-6">
@@ -62,12 +58,12 @@ const RecipePage = () => {
 
           <div className="px-3">
             <div className="mt-5">
-              <RecipeIngredients ingredients={recipe.ingredients} />
+              <Ingredients ingredients={recipe.ingredients} />
             </div>
             <div className="my-4" />
             <h5>Instructions</h5>
 
-            <RecipeInstructions instructions={recipe.instructions} />
+            <Instructions instructions={recipe.instructions} />
           </div>
         </>
       )}

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import RecipePreview from "./RecipePreview";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const Gallery = () => {
   let { loading, recipes } = useSelector((state) => state);

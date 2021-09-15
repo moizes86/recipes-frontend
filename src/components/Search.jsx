@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { onSetRecipes } from "../redux/actions";
-import { getRecipes, searchRecipe } from "../services/API_Services/RecipeAPI";
+import { searchRecipe } from "../services/API_Services/RecipeAPI";
 import { useDispatch } from "react-redux";
 
 import SearchAutoComplete from "./SearchAutoComplete";
@@ -16,22 +16,22 @@ const Search = () => {
     setQuery(value);
   };
 
-  const { sendRequest, loading, data, error, Spinner } = useFetch();
+  const { sendRequest, loading, data, Spinner } = useFetch();
 
   useEffect(() => {
     const delayedSearch = setTimeout(() => {
       if (query.length) {
         sendRequest(searchRecipe, query);
       } else {
-        setResults([]);
+        return setResults([]);
       }
     }, 1000);
 
     return () => clearTimeout(delayedSearch);
-  }, [query]);
+  }, [query, sendRequest]);
 
   useEffect(() => {
-    setResults(data);
+    return setResults(data);
   }, [data]);
 
   const handleSubmit = async (e) => {

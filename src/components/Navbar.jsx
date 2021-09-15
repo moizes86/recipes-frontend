@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 // Redux
@@ -13,11 +13,11 @@ const Navbar = () => {
   const activeUser = useSelector((state) => state.activeUser);
   const history = useHistory();
   const [collapsed, setCollapsed] = useState(true);
-  const [userLogged, setUserLogged] = useState(false)
+  // const [userLogged, setUserLogged] = useState(false)
 
-  useEffect(() => {
-    setUserLogged(activeUser)
-  }, [activeUser])
+  // useEffect(() => {
+  //   setUserLogged(activeUser)
+  // }, [activeUser])
 
   
   return (

@@ -1,33 +1,39 @@
 import React, { useState } from "react";
 
 import InputField from "./InputField";
+import Ingredients from "../Ingredients";
 import "../../styles/styles.scss";
-import RecipeIngredients from "../RecipeIngredients";
 
-const RecipeFormIngredients = ({ measuringUnits, ingredients, addItem, removeItem, submitError }) => {
-  const [values, setValues] = useState({
+const IngredientsSection = ({
+  measuringUnits = [],
+  ingredients = [],
+  addItem: addItemToFormState,
+  removeItem: removeItemFromFormState,
+  submitError,
+}) => {
+  const [ingredient, setIngredient] = useState({
     amount: 1,
-    unitId: 1,
+    unit: "",
     text: "",
   });
 
-  const [error, setError] = useState("");
+  const [addIngredientError, setAddIngredientError] = useState("");
 
   const handleIngredient = (e) => {
     e.preventDefault();
-    
-    const { amount, unitId, text } = values;
+
+    const { amount, unit, text } = ingredient;
     if (amount && text) {
-      addItem({ amount, unitId, text, unit: measuringUnits[values.unitId - 1]?.unit }, "ingredients");
-      setValues({ amount: 1, unitId: 1, text: "" });
-      if (error) setError("");
+      addItemToFormState({ amount, text, unit }, "ingredients");
+      setIngredient({ amount: 1, unit: "", text: "" });
+      if (addIngredientError) setAddIngredientError("");
     } else {
-      setError("All fields are required");
+      setAddIngredientError("All fields are required");
     }
   };
 
   const handleChange = ({ target: { name, value } }) => {
-    setValues({ ...values, [name]: value });
+    setIngredient({ ...ingredient, [name]: value });
   };
 
   return (
@@ -37,7 +43,7 @@ const RecipeFormIngredients = ({ measuringUnits, ingredients, addItem, removeIte
           label="Amount"
           name="amount"
           type="number"
-          value={values.amount}
+          value={ingredient.amount}
           shrinkLabel={false}
           classes="font-bolder"
           cols="col col-sm-3"
@@ -46,17 +52,10 @@ const RecipeFormIngredients = ({ measuringUnits, ingredients, addItem, removeIte
 
         <div className="form-group mr-2" controlid="measurement">
           <label className="form-label font-bolder"> Units</label>
-          <select
-            className="form-control "
-            value={values.unitId}
-            name="unitId"
-            onChange={handleChange}
-            
-          >
-            
+          <select className="form-control " value={ingredient.unit} name="unit" onChange={handleChange}>
             {measuringUnits.map((unit, i) => (
-              <option key={`${unit}-${i}`} value={unit.id} label={unit.unit}>
-                {unit.unit || '--'}
+              <option key={`${unit}-${i}`} value={unit} label={unit}>
+                {unit || "--"}
               </option>
             ))}
           </select>
@@ -68,7 +67,7 @@ const RecipeFormIngredients = ({ measuringUnits, ingredients, addItem, removeIte
             type="text"
             name="text"
             placeholder="Example: soaked in vinegar"
-            value={values.text}
+            value={ingredient.text}
             cols="col"
             shrinkLabel={false}
             classes="form-label font-bolder"
@@ -78,11 +77,11 @@ const RecipeFormIngredients = ({ measuringUnits, ingredients, addItem, removeIte
         <i className="fas fa-plus" onClick={handleIngredient}></i>
       </div>
 
-      <RecipeIngredients ingredients={ingredients} removeItem={removeItem} partOfForm={true}/>
+      <Ingredients ingredients={ingredients} removeItem={removeItemFromFormState} partOfForm={true} />
 
-      <small>{error || (!ingredients.length && submitError)}</small>
+      <small>{submitError || addIngredientError}</small>
     </div>
   );
 };
 
-export default RecipeFormIngredients;
+export default IngredientsSection;

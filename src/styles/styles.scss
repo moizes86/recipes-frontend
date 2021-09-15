@@ -86,6 +86,13 @@ small {
   margin: auto;
 }
 
+.table th {
+  border-top: none !important;
+}
+
+i > span{
+  display: none;
+}
 i:hover {
   @include my-hover;
 }
@@ -392,8 +399,17 @@ i:hover {
   max-width: 576px;
   font-family: "Lato";
 
+  .custom-file{
+    height: auto;
+  }
+
+  #customFile{
+    display: none;
+  }
+
   .input-file {
     border: 1px solid #ced4da;
+    
     button {
       border: none;
       border-left: 1px solid #ced4da;
@@ -402,16 +418,9 @@ i:hover {
         @include my-hover;
       }
     }
-    input[type="file"]::file-selector-button {
-      margin-right: 10px;
-      height: 100%;
-      padding: 7px;
-      border: none;
-      border-right: 1px solid #ced4da;
 
-      &:hover {
-        @include my-hover;
-      }
+    &:hover {
+      @include my-hover;
     }
   }
 
@@ -672,7 +681,7 @@ i:hover {
   .row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-rows: repeat(1, 1fr);
     gap: 20px;
 
     .image-preview {
@@ -715,6 +724,7 @@ i:hover {
 
   i {
     font-size: 2rem;
+    
   }
 }
 
