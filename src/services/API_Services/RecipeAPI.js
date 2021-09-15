@@ -1,7 +1,7 @@
 import { httpDelete, httpGet, httpPost, httpPut } from "../CRUD_Service";
 
-// const url = "https://recipes-db-mm.herokuapp.com/recipes";
-const url = "http://localhost:3100/recipes";
+const url = "https://recipes-db-mm.herokuapp.com/recipes";
+// const url = "http://localhost:3100/recipes";
 
 export const getRecipes = async () => {
   return await httpGet(url);

@@ -4,8 +4,8 @@ import { httpGet, httpPost, httpPut } from "../CRUD_Service";
 // NODE
 // / / / / / / / / / / / / / / / / //
 
-// const url = "https://recipes-db-mm.herokuapp.com/users";
-const url = "http://localhost:3100/users";
+const url = "https://recipes-db-mm.herokuapp.com/users";
+// const url = "http://localhost:3100/users";
 
 // login after signup
 export const getUserById = async (id) => {
