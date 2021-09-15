@@ -40,7 +40,7 @@ export default function NewRecipeForm() {
     (async () => {
       if (!localStorage.getItem("options")) {
         const { data } = await getOptions();
-        localStorage.setItem("options", JSON.stringify(data));
+        localStorage.setItem("options", JSON.stringify(data.payload));
       }
       return setOptions(JSON.parse(localStorage.getItem("options")));
     })();
