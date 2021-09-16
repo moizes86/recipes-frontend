@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import "./styles/styles.scss";
 
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import useFetch from "./useFetch";
 // Redux
 import { isCookie } from "./services/API_Services/UserAPI";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,42 +20,43 @@ import { onLogin } from "./redux/actions";
 
 function App() {
   const dispatch = useDispatch();
-  const checkUserLoggedInAsync = async () => {
-    const result = await isCookie();
-    dispatch(onLogin(result.data.payload));
-  };
+
+  const { sendRequest, loading, Spinner, data } = useFetch();
 
   const { activeUser } = useSelector((state) => state);
 
+  useEffect(() => {
+    sendRequest(isCookie);
+  }, [sendRequest]);
 
   useEffect(() => {
-    checkUserLoggedInAsync();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+    if (data) {
+      dispatch(onLogin(data));
+    }
+  }, [data, dispatch]);
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <div className="full-height">
-          <Navbar />
-          <div className="container-md">
-            <Switch>
-              <Route exact path="/" component={MainPage} />
-              <Route exact path="/signup" component={Signup} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/recipes/:id/:title" component={RecipePage} />
-              <Route exact path={["/add-recipe", "/edit-recipe/:recipeId"]}>
-                {!activeUser ? <Redirect to="/" /> : <RecipeForm />}
-              </Route>
-              <Route exact path="/my-profile">
-                {!activeUser ? <Redirect to="/" /> : <MyProfile />}
-              </Route>
-              <Route exact path="/my-recipes" component={MyRecipes} />
-            </Switch>
+        <BrowserRouter>
+          <div className="full-height">
+            <Navbar />
+            <div className="container-md">
+              <Switch>
+                  <Route exact path="/" component={MainPage} />
+                  <Route exact path="/signup" component={Signup} />
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/recipes/:id/:title" component={RecipePage} />
+                  <Route exact path={["/add-recipe", "/edit-recipe/:recipeId"]}>
+                    {!activeUser ? <Redirect to="/" /> : <RecipeForm />}
+                  </Route>
+                  <Route exact path="/my-profile">
+                    {!activeUser ? <Redirect to="/" /> : <MyProfile />}
+                  </Route>
+                  <Route exact path="/my-recipes" component={MyRecipes} />
+              </Switch>
+            </div>
           </div>
-        </div>
-      </BrowserRouter>
+        </BrowserRouter>
     </div>
   );
 }

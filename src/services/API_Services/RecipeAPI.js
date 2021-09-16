@@ -1,9 +1,7 @@
 import { httpDelete, httpGet, httpPost, httpPut } from "../CRUD_Service";
+import { origin } from "../http_Service";
 
-let url = null;
-process.env.NODE_ENV === "development"
-  ? (url = "https://recipes-db-mm.herokuapp.com/recipes")
-  : (url = "http://localhost:3100/recipes");
+let url = origin + "/recipes";
 
 export const getRecipes = async () => {
   return await httpGet(url);
@@ -41,14 +39,13 @@ export const editRecipe = async (data) => {
   try {
     return await httpPut(`${url}/edit-recipe`, data);
   } catch (error) {
-
     return error;
   }
 };
 
-export const addImages = async(images)=>{
-  return await httpPost(`${url}/add-images`, images)
-}
+export const addImages = async (images) => {
+  return await httpPost(`${url}/add-images`, images);
+};
 
 export const searchRecipe = async (data) => {
   return await httpGet(`${url}/search?q=${data}`);

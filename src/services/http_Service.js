@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const origin =
+export const origin =
   process.env.NODE_ENV === "development" ? "http://localhost:3100" : "https://recipes-db-mm.herokuapp.com";
 
 export const httpService = (method, url, data) => {

@@ -1,12 +1,9 @@
 import { httpGet, httpPost, httpPut } from "../CRUD_Service";
-
+import { origin } from "../http_Service";
 // / / / / / / / / / / / / / / / / //
 // NODE
 // / / / / / / / / / / / / / / / / //
-let url = null;
-process.env.NODE_ENV === "development"
-  ? (url = "https://recipes-db-mm.herokuapp.com/users")
-  : (url = "http://localhost:3100/users");
+let url = origin + '/users'
 
 // login after signup
 export const getUserById = async (id) => {
