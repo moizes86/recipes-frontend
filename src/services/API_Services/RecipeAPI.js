@@ -36,11 +36,7 @@ export const addRecipe = async (data) => {
 };
 
 export const editRecipe = async (data) => {
-  try {
-    return await httpPut(`${url}/edit-recipe`, data);
-  } catch (error) {
-    return error;
-  }
+  return await httpPut(`${url}/edit-recipe`, data);
 };
 
 export const addImages = async (images) => {

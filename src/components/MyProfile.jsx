@@ -37,7 +37,7 @@ const MyProfile = () => {
       password: activeUser.password,
       confirmPassword: "",
     });
-  }, []);
+  }, [activeUser.email, activeUser.username, activeUser.password, activeUser.confirmPassword, setValues]);
 
   useEffect(() => {
     if (data) {

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import CheckCircleSuccess from "../CheckCircleSuccess";
 import Spinner from "../Spinner";
 
@@ -7,10 +8,16 @@ export default function FormBottom({ loading, error, btnText, message, data, cou
     <div className="mt-4">
       {loading ? (
         <Spinner />
-      ) : data && message? (
+      ) : data && message ? (
         <>
           <CheckCircleSuccess message={message} />
-          {countdown ? <p className="text-center">Redirecting in {countdown}</p> : ""}
+          {countdown ? (
+            <p className="text-center">Redirecting in {countdown}</p>
+          ) : (
+            <Link to={`/recipes/${data.id}/${data.title}`}>
+              <p className="text-center">View Recipe</p>
+            </Link>
+          )}
         </>
       ) : (
         <>

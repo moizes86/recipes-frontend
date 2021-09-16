@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { validationsAPI } from "../../DAL/validations";
+import { useLocation } from "react-router";
+import { imageSrc } from "../../App";
 
 const ImageUpload = ({ images = [], handleChange, errors }) => {
   const [previews, setPreviews] = useState([]);
   const [error, setError] = useState("");
-
+  const location = useLocation();
   // In edit mode - previews are the image-urls
   useEffect(() => {
     if (images.length) {
-      const previewAddresses = images.map((image) => "http://localhost:3100/" + image);
+      const previewAddresses = images.map((image) => imageSrc + "/" + image);
       return setPreviews(previewAddresses);
     }
+  }, []);
 
-    return setPreviews([]);
-  }, [images]);
+  useEffect(() => {
+    if (location.pathname === "/add-recipe") setPreviews([]);;
+  }, [location]);
 
   const popImage = ({ target: { id } }) => {
     images.splice(+id, 1);
@@ -41,7 +45,7 @@ const ImageUpload = ({ images = [], handleChange, errors }) => {
       <div className="row justify-content-between">
         {/* ADD IMAGE BUTTON */}
         {images.length < 4 && (
-          <div className="custom-file">
+          <div className="image-preview custom-file">
             <input type="file" name="images" id="customFile" onChange={addImage} accept="image/*" />
             <label htmlFor="customFile" className="">
               <div className="image-preview">

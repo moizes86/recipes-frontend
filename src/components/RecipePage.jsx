@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { imageSrc } from "../App";
+
 // Components
 import RecipeDetails from "./RecipeDetails";
 import Ingredients from "./Ingredients";
@@ -35,7 +37,7 @@ const RecipePage = () => {
             <div className="col-sm-6">
               <img
                 className="background-img"
-                src={`${process.env.REACT_APP_SERVER_PATH}/${recipe.images[0]}`}
+                src={`${imageSrc}/${recipe.images[0]}`}
                 alt=""
               />
 

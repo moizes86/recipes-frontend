@@ -27,6 +27,7 @@ const useFetch = () => {
     message,
     Spinner,
     sendRequest,
+    setMessage
   };
 };
 

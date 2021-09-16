@@ -18,10 +18,15 @@ import MyRecipes from "./components/MyRecipes";
 import MainPage from "./components/MainPage";
 import { onLogin } from "./redux/actions";
 
+export const imageSrc = 
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_SERVER_PATH_DEV
+    : process.env.REACT_APP_SERVER_PATH_PROD;
+
 function App() {
   const dispatch = useDispatch();
 
-  const { sendRequest, loading, Spinner, data } = useFetch();
+  const { sendRequest, data } = useFetch();
 
   const { activeUser } = useSelector((state) => state);
 
@@ -37,26 +42,26 @@ function App() {
 
   return (
     <div className="App">
-        <BrowserRouter>
-          <div className="full-height">
-            <Navbar />
-            <div className="container-md">
-              <Switch>
-                  <Route exact path="/" component={MainPage} />
-                  <Route exact path="/signup" component={Signup} />
-                  <Route exact path="/login" component={Login} />
-                  <Route exact path="/recipes/:id/:title" component={RecipePage} />
-                  <Route exact path={["/add-recipe", "/edit-recipe/:recipeId"]}>
-                    {!activeUser ? <Redirect to="/" /> : <RecipeForm />}
-                  </Route>
-                  <Route exact path="/my-profile">
-                    {!activeUser ? <Redirect to="/" /> : <MyProfile />}
-                  </Route>
-                  <Route exact path="/my-recipes" component={MyRecipes} />
-              </Switch>
-            </div>
+      <BrowserRouter>
+        <div className="full-height">
+          <Navbar />
+          <div className="container-md">
+            <Switch>
+              <Route exact path="/" component={MainPage} />
+              <Route exact path="/signup" component={Signup} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/recipes/:id/:title" component={RecipePage} />
+              <Route exact path={["/add-recipe", "/edit-recipe/:recipeId"]}>
+                {!activeUser ? <Redirect to="/" /> : <RecipeForm />}
+              </Route>
+              <Route exact path="/my-profile">
+                {!activeUser ? <Redirect to="/" /> : <MyProfile />}
+              </Route>
+              <Route exact path="/my-recipes" component={MyRecipes} />
+            </Switch>
           </div>
-        </BrowserRouter>
+        </div>
+      </BrowserRouter>
     </div>
   );
 }

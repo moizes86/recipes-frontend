@@ -11,7 +11,7 @@ export default function useForm() {
   const [redirectTo, setRedirectTo] = useState(null);
   const history = useHistory();
 
-  const { sendRequest, loading, data, error, message, Spinner } = useFetch();
+  const { sendRequest, loading, data, error, message, Spinner, setMessage } = useFetch();
 
   useEffect(() => {
     if (data && redirectTo) {
@@ -127,6 +127,7 @@ export default function useForm() {
     Spinner,
     setImages,
     setValues,
+    setMessage,
     images,
     message,
     countdown,

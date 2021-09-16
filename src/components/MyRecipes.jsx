@@ -3,6 +3,7 @@ import { deleteRecipe, getMyRecipes } from "../services/API_Services/RecipeAPI";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import useFetch from "../useFetch";
+import { imageSrc } from "../App";
 import "../styles/styles.scss";
 
 const MyRecipes = () => {
@@ -18,7 +19,7 @@ const MyRecipes = () => {
   }, [id, sendRequest]);
 
   useEffect(() => {
-    if (data) {
+    if (data?.length) {
       setRecipes(data);
       setNoRecipesMessage(false);
     } else {
@@ -29,94 +30,44 @@ const MyRecipes = () => {
   return (
     <div className="my-recipes">
       <h3 className="text-center mb-4">My Recipes</h3>
-
-      {
+      {loading ? (
+        <Spinner />
+      ) : noRecipesMessage ? (
+        <p className="text-center">No recipes yet</p>
+      ) : (
         <table className="table">
           <tbody>
-            {loading ? (
-              <Spinner />
-            ) : noRecipesMessage ? (
-              <tr className="text-center">
-                <td className="text-center" colSpan="4">
-                  No recipes yet
+            {recipes.map((recipe, i) => (
+              <tr
+                key={`${recipe.title}-${i}`}
+                id={recipe.id}
+                onClick={() => history.push(`edit-recipe/${recipe.id}`)}
+              >
+                <td className="col-1">
+                  <img src={`${imageSrc}/${recipe.urls}`} alt="" />
+                </td>
+                <td>{recipe.title}</td>
+                <td className="col-1">
+                  {loading && i === activeRow ? (
+                    <i class="fa fa-circle-o-notch fa-spin"></i>
+                  ) : (
+                    <i
+                      className="far fa-trash-alt"
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        setActiveRow(i);
+                        await sendRequest(deleteRecipe, recipe.id);
+                        await sendRequest(getMyRecipes, id);
+                        setActiveRow(null);
+                      }}
+                    ></i>
+                  )}
                 </td>
               </tr>
-            ) : (
-              recipes.map((recipe, i) => (
-                <tr
-                  key={`${recipe.title}-${i}`}
-                  id={recipe.id}
-                  onClick={() => history.push(`edit-recipe/${recipe.id}`)}
-                >
-                  <td className="col-1">
-                    <img src={`${process.env.REACT_APP_SERVER_PATH}/${recipe.urls}`} alt="" />
-                  </td>
-                  <td>{recipe.title}</td>
-                  <td className="col-1">
-                    {loading && i === activeRow ? (
-                      <Spinner />
-                    ) : (
-                      <i
-                        className="far fa-trash-alt"
-                        onClick={async (e) => {
-                          e.stopPropagation();
-                          setActiveRow(i);
-                          await sendRequest(deleteRecipe, recipe.id);
-                          await sendRequest(getMyRecipes, id);
-                          setActiveRow(null);
-                        }}
-                      ></i>
-                    )}
-                  </td>
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
-      }
-
-      {/* {
-        <table className="table">
-          <tbody>
-            {recipes.length ? (
-              recipes.map((recipe, i) => (
-                <tr
-                  key={`${recipe.title}-${i}`}
-                  id={recipe.id}
-                  onClick={() => history.push(`edit-recipe/${recipe.id}`)}
-                >
-                  <td className="col-1">
-                    <img src={`${process.env.REACT_APP_SERVER_PATH}/${recipe.urls}`} alt="" />
-                  </td>
-                  <td>{recipe.title}</td>
-                  <td className="col-1">
-                    {loading && i === activeRow ? (
-                      <Spinner />
-                    ) : (
-                      <i
-                        className="far fa-trash-alt"
-                        onClick={async (e) => {
-                          e.stopPropagation();
-                          setActiveRow(i);
-                          await sendRequest(deleteRecipe, recipe.id);
-                          await getMyRecipesAsync();
-                          setActiveRow(null);
-                        }}
-                      ></i>
-                    )}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr className="text-center">
-                <td className="text-center" colSpan="4">
-                  No recipes yet
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      } */}
+      )}
     </div>
   );
 };

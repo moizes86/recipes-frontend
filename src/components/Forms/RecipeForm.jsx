@@ -35,6 +35,7 @@ export default function NewRecipeForm() {
     sendRequest,
     message,
     Spinner,
+    setMessage,
   } = useForm();
 
   useEffect(() => {
@@ -47,6 +48,7 @@ export default function NewRecipeForm() {
     })();
   }, []);
 
+  
   useEffect(() => {
     if (location.pathname === "/add-recipe") {
       setValues({
@@ -62,31 +64,38 @@ export default function NewRecipeForm() {
         cook: 0,
         servings: 0,
       });
+
+      if(message) setMessage(null)
+
     } else {
       const { recipeId } = params;
       sendRequest(getRecipe, recipeId);
     }
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, params, setValues, sendRequest]);
 
   useEffect(() => {
-    if (data) setValues(data);
-    setIsFormReady(true);
+    if (data) {
+      setValues(data);
+      setIsFormReady(true);
+    }
   }, [data, setValues]);
 
   return (
     <div>
-      {loading ? (
+      {loading && !isFormReady ? (
         <Spinner />
       ) : (
         isFormReady && (
           <form
             className="recipe-form "
-            onSubmit={async (e) => {
+            onSubmit={ (e) => {
               e.preventDefault();
               if (location.pathname === "/add-recipe") {
-                await handleSubmitRecipe(addRecipe);
+                handleSubmitRecipe(addRecipe);
               } else {
-                await handleSubmitRecipe(editRecipe);
+                handleSubmitRecipe(editRecipe);
               }
             }}
           >
@@ -261,7 +270,7 @@ export default function NewRecipeForm() {
               loading={loading}
               error={error}
               message={message}
-              data={data}
+              data={values}
             />
           </form>
         )
