@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import InputField from "./InputField";
+import InputField from "../InputField";
 import Instructions from "../Instructions";
 import "../../styles/styles.scss";
 

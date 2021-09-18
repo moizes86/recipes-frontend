@@ -1,24 +1,28 @@
 import React, { useEffect } from "react";
 
 import useForm from "../useForm";
+import { useHistory } from "react-router";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { onUpdateUser } from "../redux/actions";
 
 // Routing
-import { updateUserDetails } from "../services/API_Services/UserAPI";
+import { updateUserDetails } from "../DAL/UserAPI";
 
-import InputField from "./Forms/InputField";
-import FormBottom from "./Forms/FormBottom";
+import InputField from "./InputField";
+import FormBottom from "./FormBottom";
+import MyModal from "./MyModal";
 
 const MyProfile = () => {
+  
   let { activeUser } = useSelector((state) => state);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const {
     values,
-    errors,
+    validationErrors,
     handleBlur,
     handleChange,
     handleSubmitUser,
@@ -27,7 +31,6 @@ const MyProfile = () => {
     setValues,
     message,
     data,
-    countdown,
   } = useForm();
 
   useEffect(() => {
@@ -41,18 +44,17 @@ const MyProfile = () => {
 
   useEffect(() => {
     if (data) {
-      return () => dispatch(onUpdateUser({ ...activeUser, ...data }));
+      dispatch(onUpdateUser({ ...activeUser, ...data.payload }));
     }
   }, [data, dispatch, activeUser]);
 
-  const rediertTo = "/";
 
   return (
     <div className="my-profile">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmitUser(updateUserDetails, rediertTo);
+          handleSubmitUser(updateUserDetails);
         }}
         noValidate
       >
@@ -61,7 +63,7 @@ const MyProfile = () => {
           name="username"
           type="text"
           value={values.username}
-          errors={errors.username}
+          validationErrors={validationErrors.username}
           handleChange={handleChange}
           handleBlur={handleBlur}
         />
@@ -71,7 +73,7 @@ const MyProfile = () => {
           name="password"
           type="password"
           value={values.password}
-          errors={errors.password}
+          validationErrors={validationErrors.password}
           handleChange={handleChange}
           handleBlur={handleBlur}
         />
@@ -81,19 +83,20 @@ const MyProfile = () => {
           name="confirmPassword"
           type="password"
           value={values.confirmPassword}
-          errors={errors.confirmPassword}
+          validationErrors={validationErrors.confirmPassword}
           handleChange={handleChange}
           handleBlur={handleBlur}
         />
 
-        <FormBottom
-          btnText="Update"
-          loading={loading}
-          message={message}
-          error={error}
-          data={data}
-          countdown={countdown}
-        />
+        <FormBottom btnText="Update" loading={loading} message={message} error={error}>
+          <MyModal data={data}>
+            {data?.payload && (
+              <button className="btn-primary p-2 m-3" onClick={() => history.push("/")}>
+                Homepage
+              </button>
+            )}
+          </MyModal>
+        </FormBottom>
       </form>
     </div>
   );

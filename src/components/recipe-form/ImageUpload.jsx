@@ -13,7 +13,7 @@ const ImageUpload = ({ images = [], handleChange, errors }) => {
       const previewAddresses = images.map((image) => imageSrc + "/" + image);
       return setPreviews(previewAddresses);
     }
-  }, []);
+  }, [images]);
 
   useEffect(() => {
     if (location.pathname === "/add-recipe") setPreviews([]);;

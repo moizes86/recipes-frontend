@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/styles.scss";
+import "../styles/styles.scss";
 
 const InputCheckbox = ({ checkboxGroupTitle, inputName, items = [], itemsSelected = [], handleCheck }) => {
   return (

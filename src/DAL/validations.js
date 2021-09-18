@@ -26,8 +26,8 @@ export const validationsAPI = {
     validationsAPI.required("username", username);
     const reg = /^[a-zA-Z]{5,}\S*$/;
     if (!reg.test(username)) {
-      if (username.length < 5) throw new CustomError("username", "Username too short! Minimum 5 chars");
-      if (username.length > 20) throw new CustomError("username", "Username too long! Maximum 20 chars");
+      if (username.length < 5) throw Error("username", "Username too short! Minimum 5 chars");
+      if (username.length > 20) throw Error("username", "Username too long! Maximum 20 chars");
       throw Error("Invalid username");
     }
   },
@@ -95,6 +95,10 @@ export const validationsAPI = {
       if (!instruction) throw new CustomError("instructions", "Invalid instruction");
     });
   },
+  
+  code(code){
+    if(!code) throw Error('Code is required')
+  }
 };
 
 export const validateFields = (values) => {

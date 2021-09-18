@@ -10,7 +10,7 @@ const InputField = ({
   shrinkLabel = true,
   classes,
   cols,
-  errors,
+  validationErrors,
   handleChange,
   handleBlur,
 }) => {
@@ -43,7 +43,7 @@ const InputField = ({
           onFocus={() => setInputFocused(true)}
         />
 
-        {errors && <small className={`text-danger ml-1 ${errors ? "appear" : ""}`}>{errors}</small>}
+        {validationErrors && <small className={`text-danger ml-1 ${validationErrors ? "appear" : ""}`}>{validationErrors}</small>}
       </div>
     </div>
   );

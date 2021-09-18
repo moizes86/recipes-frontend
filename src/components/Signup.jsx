@@ -1,43 +1,42 @@
 import React, { useEffect } from "react";
 
-import { createUser } from "../services/API_Services/UserAPI";
+import { createUser } from "../DAL/UserAPI";
 import useForm from "../useForm";
+import { Link } from "react-router-dom";
 
-import InputField from "./Forms/InputField";
-import FormBottom from "./Forms/FormBottom";
+import InputField from "./InputField";
+import FormBottom from "./FormBottom";
 
 import "../styles/styles.scss";
-
+import MyModal from "./MyModal";
 
 const Signup = () => {
   const {
     values,
-    errors,
+    validationErrors,
+    loading,
+    error,
+    data,
     handleBlur,
     handleChange,
     handleSubmitUser,
-    loading,
-    error,
     setValues,
-    message,
-    data,
-    countdown,
   } = useForm();
 
   useEffect(() => {
-    setValues({ email: "", password: "" });
+  const initialValues = { email: "", username: "", password: "", confirmPassword: "" };
 
-    return () => setValues({ email: "", password: "" });
+    setValues(initialValues);
+
+    return () => setValues(initialValues);
   }, [setValues]);
-
-  const redirectTo = "/login";
 
   return (
     <div className="signup">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmitUser(createUser, redirectTo);
+          handleSubmitUser(createUser);
         }}
         noValidate
       >
@@ -46,7 +45,7 @@ const Signup = () => {
           label="Email"
           name="email"
           type="email"
-          errors={errors.email}
+          validationErrors={validationErrors.email}
           value={values.email}
           handleChange={handleChange}
           handleBlur={handleBlur}
@@ -57,7 +56,7 @@ const Signup = () => {
           name="username"
           type="text"
           value={values.username}
-          errors={errors.username}
+          validationErrors={validationErrors.username}
           handleChange={handleChange}
           handleBlur={handleBlur}
         />
@@ -67,7 +66,7 @@ const Signup = () => {
           name="password"
           type="password"
           value={values.password}
-          errors={errors.password}
+          validationErrors={validationErrors.password}
           handleChange={handleChange}
           handleBlur={handleBlur}
         />
@@ -77,12 +76,24 @@ const Signup = () => {
           name="confirmPassword"
           type="password"
           value={values.confirmPassword}
-          errors={errors.confirmPassword}
+          validationErrors={validationErrors.confirmPassword}
           handleChange={handleChange}
           handleBlur={handleBlur}
         />
 
-        <FormBottom btnText="Signup" error={error} data={data} message={message} countdown={countdown} loading={loading} />
+        <FormBottom btnText="Signup" error={error} loading={loading} >
+          {data && data.payload && !error && (
+            <MyModal data={data}>
+              <p className="text-center p-2">
+                Please{" "}
+                <Link to={`/verify/${data.payload.email}`}>
+                  <u className="text-primary">verify</u>
+                </Link>{" "}
+                your account
+              </p>
+            </MyModal>
+          )}
+        </FormBottom>
       </form>
     </div>
   );

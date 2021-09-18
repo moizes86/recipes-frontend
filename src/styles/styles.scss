@@ -31,7 +31,7 @@ $letter-spacing-soft: 1px;
 }
 
 @mixin font-abril {
-  font-family: "Abril Fatface", cursive;
+  // font-family: "Abril Fatface", cursive;
   letter-spacing: $letter-spacing-soft;
 }
 
@@ -90,10 +90,10 @@ small {
   border-top: none !important;
 }
 
-i > span{
+i > span {
   display: none;
 }
-i:hover {
+.fa-plus:hover , .fa-trash-alt:hover {
   @include my-hover;
 }
 
@@ -399,17 +399,17 @@ i:hover {
   max-width: 576px;
   font-family: "Lato";
 
-  .custom-file{
+  .custom-file {
     height: auto;
   }
 
-  #customFile{
+  #customFile {
     display: none;
   }
 
   .input-file {
     border: 1px solid #ced4da;
-    
+
     button {
       border: none;
       border-left: 1px solid #ced4da;
@@ -724,7 +724,6 @@ i:hover {
 
   i {
     font-size: 2rem;
-    
   }
 }
 
@@ -744,5 +743,13 @@ i:hover {
     img {
       height: 250px;
     }
+  }
+}
+
+#code {
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 }

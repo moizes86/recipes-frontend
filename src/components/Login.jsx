@@ -3,29 +3,32 @@ import React, { useEffect } from "react";
 // Redux
 import { onLogin } from "../redux/actions";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../services/API_Services/UserAPI";
+import { loginUser } from "../DAL/UserAPI";
 import useForm from "../useForm";
+import { useHistory } from "react-router";
+
+import { Link } from "react-router-dom";
 
 // Components
-import InputField from "./Forms/InputField";
+import InputField from "./InputField";
 
 import "../styles/styles.scss";
-import FormBottom from "./Forms/FormBottom";
+import FormBottom from "./FormBottom";
+import MyModal from "./MyModal";
 
 const Login = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const {
     values,
-    errors,
+    validationErrors,
     handleBlur,
     handleChange,
     handleSubmitUser,
     loading,
     error,
     setValues,
-    message,
     data,
-    countdown
   } = useForm();
 
   useEffect(() => {
@@ -34,17 +37,15 @@ const Login = () => {
   }, [setValues]);
 
   useEffect(() => {
-    dispatch(onLogin(data));
+    if (data) dispatch(onLogin(data.payload));
   }, [data, dispatch]);
-
-  const redirectTo = '/'
 
   return (
     <div className="login">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmitUser(loginUser, redirectTo);
+          handleSubmitUser(loginUser);
         }}
         noValidate
       >
@@ -53,7 +54,7 @@ const Login = () => {
           name="email"
           type="email"
           value={values.email}
-          errors={errors.email}
+          validationErrors={validationErrors.email}
           handleChange={handleChange}
           handleBlur={handleBlur}
         />
@@ -63,12 +64,30 @@ const Login = () => {
           name="password"
           type="password"
           value={values.password}
-          errors={errors.password}
+          validationErrors={validationErrors.password}
           handleChange={handleChange}
           handleBlur={handleBlur}
         />
 
-        <FormBottom btnText="Login" loading={loading} message={message} error={error} data={data} countdown={countdown}/>
+        <FormBottom
+          btnText="Login"
+          loading={loading}
+          error={
+            error === "Unauthorized - please verify your account" ? (
+              <u className="text-primary">
+                <Link to={`/verify/${values.email}`}> Verify your account </Link>
+              </u>
+            ) : (
+              error
+            )
+          }
+        >
+          <MyModal data={data}>
+            <button className="btn-primary p-2 m-3" onClick={() => history.push("/")}>
+              Homepage
+            </button>
+          </MyModal>
+        </FormBottom>
       </form>
     </div>
   );

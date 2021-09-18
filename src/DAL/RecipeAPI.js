@@ -1,5 +1,5 @@
-import { httpDelete, httpGet, httpPost, httpPut } from "../CRUD_Service";
-import { origin } from "../http_Service";
+import { httpDelete, httpGet, httpPost, httpPut } from "./CRUD_Service";
+import { origin } from "./http_Service";
 
 let url = origin + "/recipes";
 

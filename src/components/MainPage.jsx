@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { onSetRecipes } from "../redux/actions";
-import { getRecipes } from "../services/API_Services/RecipeAPI";
+import { getRecipes } from "../DAL/RecipeAPI";
 import useFetch from "../useFetch";
 
 // Components
@@ -17,14 +17,10 @@ const MainPage = () => {
     (async () => {
       await sendRequest(getRecipes);
     })();
-    // const onLoad = async () => {
-    //   await sendRequest(getRecipes);
-    // };
-    // onLoad();
   }, [sendRequest]);
 
   useEffect(() => {
-    if (data) dispatch(onSetRecipes(data));
+    if (data) dispatch(onSetRecipes(data.payload));
   }, [data, dispatch]);
 
   return (

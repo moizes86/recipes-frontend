@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { onLogout } from "../redux/actions";
 
 import "../styles/styles.scss";
-import { logoutUser } from "../services/API_Services/UserAPI";
+import { logoutUser } from "../DAL/UserAPI";
 
 const Navbar = () => {
   const dispatch = useDispatch();

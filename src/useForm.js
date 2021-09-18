@@ -6,33 +6,29 @@ import { useHistory } from "react-router-dom";
 export default function useForm() {
   const [values, setValues] = useState({});
   const [images, setImages] = useState([]);
-  const [errors, setErrors] = useState({});
+  const [validationErrors, setValidationErrors] = useState({});
   const [countdown, setCountdown] = useState(2);
-  const [redirectTo, setRedirectTo] = useState(null);
+  // const [redirectTo, setRedirectTo] = useState(null);
   const history = useHistory();
 
-  const { sendRequest, loading, data, error, message, Spinner, setMessage } = useFetch();
+  const { sendRequest, loading, data, error, Spinner } = useFetch();
 
-  useEffect(() => {
-    if (data && redirectTo) {
-      const myInterval = setInterval(() => {
-        setCountdown(countdown - 1);
-      }, 1000);
-      if (countdown === 0) {
-        clearInterval(myInterval);
-        history.push(redirectTo);
-      }
+  const redirect = (redirectTo) => {
+    const myInterval = setInterval(() => {
+      setCountdown(countdown - 1);
+    }, 1000);
+    if (countdown === 0) {
+      clearInterval(myInterval);
+      history.push(redirectTo);
     }
-
-    return () => {};
-  }, [data, countdown, values.email, history, redirectTo]);
+  };
 
   const handleBlur = ({ target: { name, value } }) => {
     try {
       name === "confirmPassword" ? validationsAPI[name](value, values.password) : validationsAPI[name](value);
-      setErrors({ ...errors, [name]: "" });
+      setValidationErrors({ ...validationErrors, [name]: "" });
     } catch (err) {
-      setErrors({ ...errors, [name]: err.message });
+      setValidationErrors({ ...validationErrors, [name]: err.message });
     }
   };
 
@@ -54,7 +50,7 @@ export default function useForm() {
     if (!values[inputName]) values[inputName] = [];
     values[inputName].push(item);
     setValues({ ...values });
-    setErrors({ ...errors, [inputName]: "" });
+    setValidationErrors({ ...validationErrors, [inputName]: "" });
   };
 
   const removeItem = ({
@@ -75,12 +71,12 @@ export default function useForm() {
   const validateForm = (scroll) => {
     const isValidForm = validateFields(values);
     if (isValidForm !== true) {
-      setErrors({ ...errors, [isValidForm.key]: isValidForm.message });
+      setValidationErrors({ ...validationErrors, [isValidForm.key]: isValidForm.message });
       scroll && scrollToError(isValidForm.key);
       return false;
     }
 
-    setErrors({});
+    setValidationErrors({});
     return true;
   };
 
@@ -94,25 +90,24 @@ export default function useForm() {
     document.querySelector(`#${e}`).scrollIntoView({ behavior: "smooth", block: "center" }); // scroll to element
   };
 
-  const handleSubmitRecipe = async (cb, redirectTo) => {
-    if (!validateForm()) return;
+  const handleSubmitRecipe = async (cb) => {
+    if (!validateForm(true)) return;
     const fd = new FormData();
     for (const image of values.images) fd.append("images", image);
     for (const key in values) if (key !== "images") fd.append(key, JSON.stringify(values[key]));
 
     await sendRequest(cb, fd);
-    setRedirectTo(redirectTo)
   };
 
-  const handleSubmitUser = async (cb, redirectTo) => {
+  const handleSubmitUser = async (cb) => {
     if (!validateForm(false)) return;
     await sendRequest(cb, values);
-    setRedirectTo(redirectTo)
+    // setRedirectTo(redirectTo)
   };
 
   return {
     values,
-    errors,
+    validationErrors,
     addItem,
     removeItem,
     handleBlur,
@@ -127,9 +122,8 @@ export default function useForm() {
     Spinner,
     setImages,
     setValues,
-    setMessage,
     images,
-    message,
     countdown,
+    redirect,
   };
 }

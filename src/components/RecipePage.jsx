@@ -11,7 +11,7 @@ import Instructions from "./Instructions";
 import "../styles/styles.scss";
 
 import { useParams } from "react-router-dom";
-import { getRecipe } from "../services/API_Services/RecipeAPI";
+import { getRecipe } from "../DAL/RecipeAPI";
 import useFetch from "../useFetch";
 import MyCarousel from "./MyCarousel";
 
@@ -24,7 +24,7 @@ const RecipePage = () => {
   }, [id, sendRequest, title]);
 
   useEffect(() => {
-    setRecipe(data);
+    if(data) setRecipe(data.payload);
   }, [data]);
 
   return (

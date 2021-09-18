@@ -1,17 +1,13 @@
-import { httpGet, httpPost, httpPut } from "../CRUD_Service";
-import { origin } from "../http_Service";
+import { httpGet, httpPost, httpPut } from "./CRUD_Service";
+import { origin } from "./http_Service";
 // / / / / / / / / / / / / / / / / //
 // NODE
 // / / / / / / / / / / / / / / / / //
-let url = origin + '/users'
+let url = origin + "/users";
 
 // login after signup
 export const getUserById = async (id) => {
-  try {
-    return await httpGet(`${url}/login?${id}`);
-  } catch (error) {
-    return error;
-  }
+  return await httpGet(`${url}/login?${id}`);
 };
 
 export const updateUserDetails = async (details) => {
@@ -32,6 +28,10 @@ export const loginUser = async (loginData) => {
 
 export const createUser = async (data) => {
   return await httpPost(`${url}/signup`, data);
+};
+
+export const verify = async (data) => {
+  return await httpPost(`${url}/verify`, data);
 };
 
 // / / / / / / / / / / / / / / / / //

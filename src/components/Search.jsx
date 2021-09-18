@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { onSetRecipes } from "../redux/actions";
-import { searchRecipe } from "../services/API_Services/RecipeAPI";
+import { searchRecipe } from "../DAL/RecipeAPI";
 import { useDispatch } from "react-redux";
 
 import SearchAutoComplete from "./SearchAutoComplete";
@@ -31,7 +31,7 @@ const Search = () => {
   }, [query, sendRequest]);
 
   useEffect(() => {
-    return setResults(data);
+    if(data) return setResults(data.payload);
   }, [data]);
 
   const handleSubmit = async (e) => {

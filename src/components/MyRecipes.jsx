@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { deleteRecipe, getMyRecipes } from "../services/API_Services/RecipeAPI";
+import { deleteRecipe, getMyRecipes } from "../DAL/RecipeAPI";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import useFetch from "../useFetch";
@@ -19,8 +19,8 @@ const MyRecipes = () => {
   }, [id, sendRequest]);
 
   useEffect(() => {
-    if (data?.length) {
-      setRecipes(data);
+    if (data) {
+      setRecipes(data.payload);
       setNoRecipesMessage(false);
     } else {
       setNoRecipesMessage(true);
