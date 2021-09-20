@@ -32,7 +32,9 @@ export const getDiffictultyLevels = async () => {
 };
 
 export const addRecipe = async (data) => {
-  return await httpPost(`${url}/add-recipe`, data);
+  const token = sessionStorage.getItem("token");
+
+  return await httpPost(`${url}/add-recipe`, data, token);
 };
 
 export const editRecipe = async (data) => {
@@ -47,8 +49,8 @@ export const searchRecipe = async (data) => {
   return await httpGet(`${url}/search?q=${data}`);
 };
 
-export const getMyRecipes = async (id) => {
-  return await httpGet(`${url}/my-recipes?userId=${id}`);
+export const getMyRecipes = async (email) => {
+  return await httpGet(`${url}/my-recipes?email=${email}`);
 };
 
 export const getImages = async (recipe_id) => {

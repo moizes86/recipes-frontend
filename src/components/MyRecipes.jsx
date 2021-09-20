@@ -10,13 +10,13 @@ const MyRecipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [noRecipesMessage, setNoRecipesMessage] = useState(false);
   const [activeRow, setActiveRow] = useState(null);
-  const { id } = useSelector((state) => state.activeUser);
+  const { email } = useSelector((state) => state.activeUser);
   const history = useHistory();
 
   const { sendRequest, loading, Spinner, data } = useFetch();
   useEffect(() => {
-    sendRequest(getMyRecipes, id);
-  }, [id, sendRequest]);
+    sendRequest(getMyRecipes, email);
+  }, [email, sendRequest]);
 
   useEffect(() => {
     if (data) {
@@ -57,7 +57,7 @@ const MyRecipes = () => {
                         e.stopPropagation();
                         setActiveRow(i);
                         await sendRequest(deleteRecipe, recipe.id);
-                        await sendRequest(getMyRecipes, id);
+                        await sendRequest(getMyRecipes, email);
                         setActiveRow(null);
                       }}
                     ></i>

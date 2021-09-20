@@ -95,7 +95,6 @@ export default function useForm() {
     const fd = new FormData();
     for (const image of values.images) fd.append("images", image);
     for (const key in values) if (key !== "images") fd.append(key, JSON.stringify(values[key]));
-
     await sendRequest(cb, fd);
   };
 

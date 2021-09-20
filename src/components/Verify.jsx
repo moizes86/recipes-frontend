@@ -16,6 +16,7 @@ export default function Verify() {
     setValues({ email, code: "" });
   }, [setValues, email]);
 
+
   return (
     <div className="container col-sm-7 col-md-6 col-lg-5 col-xl-4 my-5">
       <form

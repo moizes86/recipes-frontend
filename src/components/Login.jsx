@@ -36,6 +36,11 @@ const Login = () => {
     return () => setValues({ email: "", password: "" });
   }, [setValues]);
 
+    useEffect(() => {
+      debugger
+      if (data && data.accessToken) sessionStorage.setItem("token", "Bearer " + data.accessToken);
+    }, [data]);
+  
   useEffect(() => {
     if (data) dispatch(onLogin(data.payload));
   }, [data, dispatch]);

@@ -5,6 +5,8 @@ import { useLocation, useParams, useHistory, Link } from "react-router-dom";
 
 import { getOptions, addRecipe, editRecipe, getRecipe } from "../../DAL/RecipeAPI";
 
+import { useSelector } from "react-redux";
+
 import AccordionCardHeader from "./AccordionCardHeader";
 import InputField from "../InputField";
 import InputCheckbox from "../InputCheckbox";
@@ -14,11 +16,12 @@ import InstructionsSection from "./InstructionsSection";
 import ImageUpload from "./ImageUpload";
 import MyModal from "../MyModal";
 
-export default function NewRecipeForm() {
+export default function RecipeForm() {
   const [options, setOptions] = useState({});
   const location = useLocation();
   const params = useParams();
   const history = useHistory();
+  const {activeUser} = useSelector(state=>state);
 
   const {
     values,
@@ -52,6 +55,7 @@ export default function NewRecipeForm() {
   useEffect(() => {
     if (location.pathname === "/add-recipe") {
       setValues({
+        email: activeUser.email,
         title: "",
         source: "",
         source_url: "",
