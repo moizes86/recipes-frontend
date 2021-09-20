@@ -153,9 +153,9 @@ i > span {
   align-items: center;
   min-height: 64.3vh;
 
-  @media #{$break_md}, #{$break_lg} {
-    max-width: 67%;
-  }
+  // @media #{$break_md}, #{$break_lg} {
+  //   max-width: 67%;
+  // }
 
   form {
     width: 300px;
@@ -398,6 +398,7 @@ i > span {
 .recipe-form {
   max-width: 576px;
   font-family: "Lato";
+  margin:auto;
 
   .custom-file {
     height: auto;

@@ -9,7 +9,7 @@ import "../styles/styles.scss";
 const MyRecipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [noRecipesMessage, setNoRecipesMessage] = useState(false);
-  const [activeRow, setActiveRow] = useState(null);
+  const [activeRow, setActiveRow] = useState(undefined);
   const { email } = useSelector((state) => state.activeUser);
   const history = useHistory();
 
@@ -19,18 +19,18 @@ const MyRecipes = () => {
   }, [email, sendRequest]);
 
   useEffect(() => {
-    if (data) {
+    if (data?.payload?.length) {
       setRecipes(data.payload);
       setNoRecipesMessage(false);
     } else {
       setNoRecipesMessage(true);
     }
-  }, [data]);
+  }, [data?.payload]);
 
   return (
     <div className="my-recipes">
       <h3 className="text-center mb-4">My Recipes</h3>
-      {loading ? (
+      {loading && !activeRow ? (
         <Spinner />
       ) : noRecipesMessage ? (
         <p className="text-center">No recipes yet</p>
@@ -48,14 +48,14 @@ const MyRecipes = () => {
                 </td>
                 <td>{recipe.title}</td>
                 <td className="col-1">
-                  {loading && i === activeRow ? (
-                    <i class="fa fa-circle-o-notch fa-spin"></i>
+                  {loading && i + 1 === activeRow ? (
+                    <Spinner />
                   ) : (
                     <i
                       className="far fa-trash-alt"
                       onClick={async (e) => {
                         e.stopPropagation();
-                        setActiveRow(i);
+                        setActiveRow(i + 1);
                         await sendRequest(deleteRecipe, recipe.id);
                         await sendRequest(getMyRecipes, email);
                         setActiveRow(null);

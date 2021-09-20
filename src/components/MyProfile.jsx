@@ -13,6 +13,7 @@ import { updateUserDetails } from "../DAL/UserAPI";
 import InputField from "./InputField";
 import FormBottom from "./FormBottom";
 import MyModal from "./MyModal";
+import CheckCircleSuccess from "./CheckCircleSuccess";
 
 const MyProfile = () => {
   
@@ -51,53 +52,62 @@ const MyProfile = () => {
 
   return (
     <div className="my-profile">
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmitUser(updateUserDetails);
-        }}
-        noValidate
-      >
-        <InputField
-          label="Username"
-          name="username"
-          type="text"
-          value={values.username}
-          validationErrors={validationErrors.username}
-          handleChange={handleChange}
-          handleBlur={handleBlur}
-        />
+      {!data?.message ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmitUser(updateUserDetails);
+          }}
+          noValidate
+        >
+          <InputField
+            label="Username"
+            name="username"
+            type="text"
+            value={values.username}
+            validationErrors={validationErrors.username}
+            handleChange={handleChange}
+            handleBlur={handleBlur}
+          />
 
-        <InputField
-          label="Password"
-          name="password"
-          type="password"
-          value={values.password}
-          validationErrors={validationErrors.password}
-          handleChange={handleChange}
-          handleBlur={handleBlur}
-        />
+          <InputField
+            label="Password"
+            name="password"
+            type="password"
+            value={values.password}
+            validationErrors={validationErrors.password}
+            handleChange={handleChange}
+            handleBlur={handleBlur}
+          />
 
-        <InputField
-          label="Confirm Password"
-          name="confirmPassword"
-          type="password"
-          value={values.confirmPassword}
-          validationErrors={validationErrors.confirmPassword}
-          handleChange={handleChange}
-          handleBlur={handleBlur}
-        />
+          <InputField
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+            value={values.confirmPassword}
+            validationErrors={validationErrors.confirmPassword}
+            handleChange={handleChange}
+            handleBlur={handleBlur}
+          />
 
-        <FormBottom btnText="Update" loading={loading} message={message} error={error}>
-          <MyModal data={data}>
-            {data?.payload && (
-              <button className="btn-primary p-2 m-3" onClick={() => history.push("/")}>
-                Homepage
-              </button>
-            )}
-          </MyModal>
-        </FormBottom>
-      </form>
+          <FormBottom btnText="Update" loading={loading} message={message} error={error}>
+            <MyModal data={data}>
+              {data?.payload && (
+                <button className="btn-primary p-2 m-3" onClick={() => history.push("/")}>
+                  Homepage
+                </button>
+              )}
+            </MyModal>
+          </FormBottom>
+        </form>
+      ) : (
+        <div className="d-flex flex-column align-items-center">
+          <CheckCircleSuccess message={data?.message} />
+          <button className="btn-primary p-2 m-3" onClick={() => history.push("/")}>
+            Homepage
+          </button>
+        </div>
+      )}
     </div>
   );
 };

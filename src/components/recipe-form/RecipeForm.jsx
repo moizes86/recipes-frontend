@@ -15,13 +15,15 @@ import IngredientsSection from "./IngredientsSection";
 import InstructionsSection from "./InstructionsSection";
 import ImageUpload from "./ImageUpload";
 import MyModal from "../MyModal";
+import CheckCircleSuccess from "../CheckCircleSuccess";
 
 export default function RecipeForm() {
   const [options, setOptions] = useState({});
+  const [loadingOnSubmition, setLoadingOnSubmition] = useState(false);
   const location = useLocation();
   const params = useParams();
   const history = useHistory();
-  const {activeUser} = useSelector(state=>state);
+  const { activeUser } = useSelector((state) => state);
 
   const {
     values,
@@ -37,9 +39,7 @@ export default function RecipeForm() {
     error,
     setValues,
     sendRequest,
-    message,
     Spinner,
-    setMessage,
   } = useForm();
 
   useEffect(() => {
@@ -68,15 +68,11 @@ export default function RecipeForm() {
         cook: 0,
         servings: 0,
       });
-
-      if (message) setMessage(null);
     } else {
       const { recipeId } = params;
       sendRequest(getRecipe, recipeId);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location, params, setValues, sendRequest]);
+  }, [location, params, setValues, sendRequest, activeUser]);
 
   useEffect(() => {
     if (data) {
@@ -86,18 +82,20 @@ export default function RecipeForm() {
 
   return (
     <div>
-      {loading && !data ? (
+      {loading && !loadingOnSubmition ? (
         <Spinner />
-      ) : (
+      ) : !data?.message ? (
         <form
           className="recipe-form "
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
+            setLoadingOnSubmition(true);
             if (location.pathname === "/add-recipe") {
-              handleSubmitRecipe(addRecipe);
+              await handleSubmitRecipe(addRecipe);
             } else {
-              handleSubmitRecipe(editRecipe);
+              await handleSubmitRecipe(editRecipe);
             }
+            setLoadingOnSubmition(false);
           }}
         >
           <div className="accordion" id="accordionExample">
@@ -270,10 +268,12 @@ export default function RecipeForm() {
               </div>
             </div>
           </div>
+
           <FormBottom
             btnText={location.pathname === "/add-recipe" ? "Add Recipe" : "Save"}
             loading={loading}
             error={error}
+            data={data}
           >
             {data?.message && (
               <MyModal data={data}>
@@ -289,6 +289,16 @@ export default function RecipeForm() {
             )}
           </FormBottom>
         </form>
+      ) : (
+        <div className="d-flex flex-column align-items-center">
+          <CheckCircleSuccess message={data?.message} />
+          <Link to={`/recipes/${data.payload.id}/${data.payload.title}`}>
+            <u className="text-primary">View Recipe</u>
+          </Link>
+          <button className="btn-primary p-2 m-3" onClick={() => history.push("/")}>
+            Homepage
+          </button>
+        </div>
       )}
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useFetch from "./useFetch";
 import { validationsAPI, validateFields } from "./DAL/validations";
 import { useHistory } from "react-router-dom";
@@ -11,7 +11,7 @@ export default function useForm() {
   // const [redirectTo, setRedirectTo] = useState(null);
   const history = useHistory();
 
-  const { sendRequest, loading, data, error, Spinner } = useFetch();
+  const { sendRequest, loading, data, error, requestMade, Spinner } = useFetch();
 
   const redirect = (redirectTo) => {
     const myInterval = setInterval(() => {
@@ -122,7 +122,6 @@ export default function useForm() {
     setImages,
     setValues,
     images,
-    countdown,
-    redirect,
+    requestMade
   };
 }

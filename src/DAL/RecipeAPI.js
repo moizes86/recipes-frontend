@@ -33,7 +33,6 @@ export const getDiffictultyLevels = async () => {
 
 export const addRecipe = async (data) => {
   const token = sessionStorage.getItem("token");
-
   return await httpPost(`${url}/add-recipe`, data, token);
 };
 

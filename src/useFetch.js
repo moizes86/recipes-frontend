@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import Spinner from "./components/Spinner";
 
 const useFetch = () => {
@@ -9,6 +10,7 @@ const useFetch = () => {
   const sendRequest = useCallback(async (cb, ...params) => {
     setLoading(true);
     setError(null);
+
     try {
       const result = await cb(...params);
       setData(result.data);
