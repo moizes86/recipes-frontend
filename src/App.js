@@ -23,7 +23,9 @@ export const imageSrc =
   process.env.NODE_ENV === "development"
     ? process.env.REACT_APP_IMAGE_PATH_DEV
     : process.env.REACT_APP_IMAGE_PATH_PROD;
-
+console.log(process.env.REACT_APP_IMAGE_PATH_PROD);
+console.log(process.env);
+console.log(imageSrc);
 function App() {
   const dispatch = useDispatch();
 
