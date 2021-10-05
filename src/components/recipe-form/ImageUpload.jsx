@@ -12,7 +12,7 @@ const ImageUpload = ({ images = [], handleChange, errors }) => {
   useEffect(() => {
     if (images.length) {
       
-      return setPreviews(images);
+      return setPreviews(images.map(image=> origin+'/public/images/'+image));
     }
   }, [images]);
 
@@ -60,8 +60,8 @@ const ImageUpload = ({ images = [], handleChange, errors }) => {
         {/* PREVIEWS */}
         {previews.map((preview, i) => (
           <div className="image-preview" key={preview}>
-            {/* <img src={`${origin}/recipes/images/${preview}`} alt="" /> */}
-            <Image urls={preview} />
+            <img src={preview} alt="" />
+            {/* <Image urls={preview} /> */}
             <div className="pannel">
               <i
                 className="fas fa-trash-alt text-danger"

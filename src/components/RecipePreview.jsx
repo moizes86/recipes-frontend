@@ -5,13 +5,13 @@ import Image from "./Image";
 
 const RecipePreview = ({ data: { id, title, urls, description } }) => {
   const history = useHistory();
+  const previewImage = urls? urls[0] : null;
 
   return (
     <div className="recipe-preview">
       <div className="thumb-box">
         <span className="link" onClick={() => history.push(`/recipes/${id}/${title}`)}>
-          {/* <img src={`${origin}/recipes/images/${urls}`} alt="" /> */}
-          <Image urls={urls}/>
+          <Image urls={previewImage}/>
           <span className="overlay-box">
             <span className="title">{title}</span>
             <span className="description">{description}</span>
