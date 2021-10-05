@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { imageSrc } from "../App";
+import {origin} from '../DAL/http_Service'
 
 // Components
 import RecipeDetails from "./RecipeDetails";
@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import { getRecipe } from "../DAL/RecipeAPI";
 import useFetch from "../useFetch";
 import MyCarousel from "./MyCarousel";
+import Image from "./Image";
 
 const RecipePage = () => {
   const { id, title } = useParams();
@@ -35,11 +36,8 @@ const RecipePage = () => {
         <>
           <div className="row">
             <div className="col-sm-6">
-              <img
-                className="background-img"
-                src={`${imageSrc}/${recipe.images[0]}`}
-                alt=""
-              />
+              {/* <img className="background-img" src={`${origin}/recipes/images/${recipe.images[0]}`} alt="" /> */}
+              <Image urls={recipe.images[0]} />
 
               <MyCarousel urls={recipe.images} />
             </div>

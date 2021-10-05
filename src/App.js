@@ -19,11 +19,6 @@ import MainPage from "./components/MainPage";
 import { onLogin } from "./redux/actions";
 import Verify from "./components/Verify";
 
-export const imageSrc =
-  process.env.NODE_ENV === "development"
-    ? process.env.REACT_APP_IMAGE_PATH_DEV
-    : process.env.REACT_APP_IMAGE_PATH_PROD;
-    
 function App() {
   const dispatch = useDispatch();
 

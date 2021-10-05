@@ -1,5 +1,4 @@
 import { useState, useCallback } from "react";
-import { useHistory } from "react-router-dom";
 import Spinner from "./components/Spinner";
 
 const useFetch = () => {

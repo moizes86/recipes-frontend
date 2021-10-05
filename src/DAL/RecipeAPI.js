@@ -64,6 +64,10 @@ export const deleteRecipe = async (recipeId) => {
   return await httpDelete(`${url}/recipe?recipeId=${recipeId}`);
 };
 
+export const getImage = async (imageName) =>{
+  return await httpGet(`${url}/images/${imageName}`)
+}
+
 // / / / / / / / / / / / / / / / / //
 // / / / / / / / / / / / / / / / / //
 // FLASK

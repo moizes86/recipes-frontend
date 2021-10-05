@@ -13,11 +13,6 @@ const Navbar = () => {
   const activeUser = useSelector((state) => state.activeUser);
   const history = useHistory();
   const [collapsed, setCollapsed] = useState(true);
-  // const [userLogged, setUserLogged] = useState(false)
-
-  // useEffect(() => {
-  //   setUserLogged(activeUser)
-  // }, [activeUser])
 
   
   return (

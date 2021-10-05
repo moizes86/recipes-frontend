@@ -1,27 +1,15 @@
 import { useState } from "react";
 import useFetch from "./useFetch";
 import { validationsAPI, validateFields } from "./DAL/validations";
-import { useHistory } from "react-router-dom";
 
 export default function useForm() {
   const [values, setValues] = useState({});
   const [images, setImages] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
-  const [countdown, setCountdown] = useState(2);
-  // const [redirectTo, setRedirectTo] = useState(null);
-  const history = useHistory();
 
   const { sendRequest, loading, data, error, requestMade, Spinner } = useFetch();
 
-  const redirect = (redirectTo) => {
-    const myInterval = setInterval(() => {
-      setCountdown(countdown - 1);
-    }, 1000);
-    if (countdown === 0) {
-      clearInterval(myInterval);
-      history.push(redirectTo);
-    }
-  };
+ 
 
   const handleBlur = ({ target: { name, value } }) => {
     try {

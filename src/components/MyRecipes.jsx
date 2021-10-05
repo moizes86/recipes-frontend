@@ -3,8 +3,8 @@ import { deleteRecipe, getMyRecipes } from "../DAL/RecipeAPI";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import useFetch from "../useFetch";
-import { imageSrc } from "../App";
 import "../styles/styles.scss";
+import Image from "./Image";
 
 const MyRecipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -44,7 +44,8 @@ const MyRecipes = () => {
                 onClick={() => history.push(`edit-recipe/${recipe.id}`)}
               >
                 <td className="col-1">
-                  <img src={`${imageSrc}/${recipe.urls}`} alt="" />
+                  {/* <img src={`${origin}/recipes/images/${recipe.urls}`} alt="" /> */}
+                  <Image urls={recipe.urls} />
                 </td>
                 <td>{recipe.title}</td>
                 <td className="col-1">
