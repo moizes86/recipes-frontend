@@ -1,5 +1,5 @@
 import React from "react";
-import '../styles/styles.scss';
+import "../styles/styles.scss";
 
 const RecipeDetails = ({
   title,
@@ -33,12 +33,10 @@ const RecipeDetails = ({
         </p>
 
         <div className="bottom-line-icons">
-          <i className="far fa-clock mr-3">
-            <span className="ml-1">{cook}</span>
-          </i>
-          <i className="far fa-utensils mr-3">
-            <span className="ml-1">{servings}</span>
-          </i>
+          <i className="far fa-clock "></i>
+          <span className="">{cook}</span>
+          <i className="far fa-utensils ml-4 mr-1"></i>
+          <span className="">{servings}</span>
         </div>
       </div>
     </div>

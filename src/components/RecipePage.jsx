@@ -36,7 +36,6 @@ const RecipePage = () => {
         <>
           <div className="row">
             <div className="col-sm-6">
-              {/* <img className="background-img" src={`${origin}/recipes/images/${recipe.images[0]}`} alt="" /> */}
               <Image urls={recipe.images[0]} />
 
               <MyCarousel urls={recipe.images} />
