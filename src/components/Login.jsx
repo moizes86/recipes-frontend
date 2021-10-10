@@ -38,7 +38,7 @@ const Login = () => {
   }, [setValues]);
 
   useEffect(() => {
-    if (data && data.accessToken) sessionStorage.setItem("token", "Bearer " + data.accessToken);
+    if (data && data.accessToken) localStorage.setItem("token",data.accessToken);
   }, [data]);
 
   useEffect(() => {

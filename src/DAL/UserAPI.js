@@ -4,6 +4,7 @@ import { origin } from "./http_Service";
 // NODE
 // / / / / / / / / / / / / / / / / //
 let url = origin + "/users";
+const token = localStorage.getItem('token');
 
 // login after signup
 export const getUserById = async (id) => {
@@ -14,8 +15,8 @@ export const updateUserDetails = async (details) => {
   return httpPut(`${url}/update-details`, details);
 };
 
-export const isCookie = async () => {
-  return await httpGet(`${url}/login`);
+export const doesTokenExists = async () => {
+  return await httpGet(`${url}/login/${token}`);
 };
 
 export const logoutUser = async () => {
@@ -23,7 +24,8 @@ export const logoutUser = async () => {
 };
 
 export const loginUser = async (loginData) => {
-  return await httpPost(`${url}/login`, loginData);
+  const result =  await httpPost(`${url}/login`, loginData);
+  return result;
 };
 
 export const createUser = async (data) => {

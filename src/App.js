@@ -4,7 +4,7 @@ import "./styles/styles.scss";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import useFetch from "./useFetch";
 // Redux
-import { isCookie } from "./DAL/UserAPI";
+import { doesTokenExists } from "./DAL/UserAPI";
 import { useDispatch, useSelector } from "react-redux";
 
 // import App from "./App";
@@ -27,7 +27,7 @@ function App() {
   const { activeUser } = useSelector((state) => state);
 
   useEffect(() => {
-    sendRequest(isCookie);
+    sendRequest(doesTokenExists);
   }, [sendRequest]);
 
   useEffect(() => {
