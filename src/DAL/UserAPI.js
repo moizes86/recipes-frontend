@@ -19,10 +19,6 @@ export const doesTokenExists = async () => {
   return await httpGet(`${url}/login/${token}`);
 };
 
-export const logoutUser = async () => {
-  return httpPost(`${url}/logout`);
-};
-
 export const loginUser = async (loginData) => {
   const result =  await httpPost(`${url}/login`, loginData);
   return result;

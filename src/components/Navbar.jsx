@@ -14,7 +14,6 @@ const Navbar = () => {
   const history = useHistory();
   const [collapsed, setCollapsed] = useState(true);
 
-  
   return (
     <nav className="my-navbar navbar navbar-expand-md">
       <div className="container">
@@ -55,12 +54,10 @@ const Navbar = () => {
                 </li>
                 <li
                   className="nav-link "
-                  onClick={() =>
-                    dispatch(() => {
-                      logoutUser();
-                      dispatch(onLogout());
-                    })
-                  }
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    dispatch(onLogout());
+                  }}
                 >
                   Logout
                 </li>
