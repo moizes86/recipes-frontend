@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { validationsAPI } from "../../DAL/validations";
 import { useLocation } from "react-router";
 import {origin} from '../../DAL/http_Service';
-import Image from "../Image";
 
 const ImageUpload = ({ images = [], handleChange, errors }) => {
   const [previews, setPreviews] = useState([]);
@@ -12,7 +11,7 @@ const ImageUpload = ({ images = [], handleChange, errors }) => {
   useEffect(() => {
     if (images.length) {
       
-      return setPreviews(images.map(image=> origin+'/public/images/'+image));
+      return setPreviews(images.map(image=> origin+'/recipes/images/'+image));
     }
   }, [images]);
 
@@ -61,7 +60,6 @@ const ImageUpload = ({ images = [], handleChange, errors }) => {
         {previews.map((preview, i) => (
           <div className="image-preview" key={preview}>
             <img src={preview} alt="" />
-            {/* <Image urls={preview} /> */}
             <div className="pannel">
               <i
                 className="fas fa-trash-alt text-danger"
